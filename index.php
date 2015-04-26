@@ -10,7 +10,10 @@ $controller = 'master';
 $method = 'index';
 $param = array();
 
+include_once 'config/db.php';
+include_once 'lib/database.php';
 include_once 'controllers/master.php';
+include_once 'models/master.php';
 
 if( !empty( $request ) ){
     if( 0 === strpos( $request, $request_home ) ){
@@ -37,3 +40,8 @@ $instance = new $controller_class();
 if( method_exists( $instance, $method ) ){
     call_user_func_array( array( $instance, $method ), array( $param ) );
 }
+
+$db_object = \Lib\Database::get_istance();
+
+$db_conn = $db_object::get_db();
+
