@@ -1,16 +1,16 @@
 <?php
 
-namespace Controllers;
+namespace User\Controllers;
 
-class Albums_Controller extends Master_Controller {
+class Albums_Controller extends User_Controller {
 
     protected $layout;
     protected $views_dir;
 
     public function __construct() {
         parent::__construct(get_class(),
-                            'album',
-                            '/views/albums/');
+            'album',
+            'views/user/albums/');
     }
 
     public function index() {

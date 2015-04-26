@@ -22,6 +22,17 @@ class Master_Controller {
 
         $this->model = new $model_class( array( 'table' => 'none' ) );
 
+        $auth = \Lib\Auth::get_instance();
+        $logged_user = $auth->get_logged_user();
+        $this->logged_user = $logged_user;
+
         $this->layout = DX_ROOT_DIR . '/views/layouts/default.php';
+    }
+
+    public function index() {
+
+        $template_name = DX_ROOT_DIR . $this->views_dir . 'index.php';
+
+        include_once $this->layout;
     }
 }
