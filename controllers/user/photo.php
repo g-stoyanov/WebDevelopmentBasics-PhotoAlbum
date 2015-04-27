@@ -9,7 +9,9 @@ class Photo_Controller extends User_Controller {
 
     public function __construct() {
         parent::__construct(get_class(),
-            'photo',
+            $models = array(
+                'photo' => 'photo'
+            ),
             'views/user/photo/');
     }
 

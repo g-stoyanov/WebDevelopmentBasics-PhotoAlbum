@@ -9,7 +9,9 @@ class Categories_Controller extends User_Controller {
 
     public function __construct() {
         parent::__construct(get_class(),
-            'category',
+            $models = array(
+                'category' => 'category'
+            ),
             'views/user/categories/');
     }
 

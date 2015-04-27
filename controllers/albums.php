@@ -12,12 +12,4 @@ class Albums_Controller extends Master_Controller {
                             'album',
                             '/views/albums/');
     }
-
-    public function index() {
-        $albums = $this->model->find();
-
-        $template_name = DX_ROOT_DIR . $this->views_dir . 'index.php';
-
-        include_once $this->layout;
-    }
 }

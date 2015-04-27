@@ -5,9 +5,11 @@ namespace User\Controllers;
 class User_Controller extends \Controllers\Master_Controller {
 
     public function __construct($class_name = '\User\Controllers\User_Controller',
-                                $model = 'master',
-                                $views_dir = 'views/user/master') {
-        parent::__construct( $class_name, $model, $views_dir);
+                                $models = array(
+                                    'master' => 'master'
+                                ),
+                                $views_dir = 'views/user/master/') {
+        parent::__construct( $class_name, $models, $views_dir);
 
         $auth = \Lib\Auth::get_instance();
         $logged_user = $auth->get_logged_user();

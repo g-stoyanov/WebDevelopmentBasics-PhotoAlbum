@@ -32,6 +32,24 @@ class Master_Model {
         $this->db = $db_object::get_db();
     }
 
+    public function add( $element ) {
+        $keys = array_keys( $element );
+        $values = array();
+
+        foreach( $element as $key => $value ) {
+            $values[] = "'" . $this->db->real_escape_string( $value ) . "'";
+        }
+
+        $keys = implode( $keys, ',' );
+        $values = implode( $values, ',' );
+
+        $query = "INSERT INTO {$this->table}($keys) VALUES($values)";
+
+        $this->db->query( $query );
+
+        return $this->db->affected_rows;
+    }
+
     public function find( $args = array() ){
         $defaults = array(
             'table' => $this->table,

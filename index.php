@@ -43,11 +43,9 @@ if( !empty( $request ) ){
     }
 }
 
-$user_namespace = $user_routing ? '\User' : '';
+$user_namespace = $user_routing ? 'User' : '';
 
-$controller_class = $user_routing ?
-    '\User\Controllers\User_Controller' :
-    $user_namespace . '\Controllers\\' . ucfirst( $controller ) . '_Controller';
+$controller_class = $user_namespace . '\Controllers\\' . ucfirst( $controller ) . '_Controller';
 
 $instance = new $controller_class();
 
@@ -58,4 +56,3 @@ if( method_exists( $instance, $method ) ){
 $db_object = \Lib\Database::get_istance();
 
 $db_conn = $db_object::get_db();
-

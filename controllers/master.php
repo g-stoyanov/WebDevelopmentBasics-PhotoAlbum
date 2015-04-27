@@ -10,17 +10,22 @@ class Master_Controller {
     protected $model;
 
     public function __construct( $class_name = '\Controllers\Master_Controller',
-                                 $model = 'master',
+                                 $models = array(
+                                     'master' => 'master'
+                                 ),
                                  $views_dir = '/views/master/' ) {
 
         $this->views_dir = $views_dir;
         $this->class_name = $class_name;
 
-        include_once DX_ROOT_DIR . "models/{$model}.php";
+        foreach( $models as $key => $value ) {
+            include_once DX_ROOT_DIR . "models/{$value}.php";
 
-        $model_class = "Models\\" . ucfirst($model) . "_Model";
+            $model_class = "Models\\" . ucfirst($value) . "_Model";
 
-        $this->model = new $model_class( array( 'table' => 'none' ) );
+            $this->models[$key] = new $model_class( array( 'table' => 'none' ) );
+        }
+
 
         $auth = \Lib\Auth::get_instance();
         $logged_user = $auth->get_logged_user();
