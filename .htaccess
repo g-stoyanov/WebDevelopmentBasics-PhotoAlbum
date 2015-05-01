@@ -1,6 +1,8 @@
+AddType application/x-httpd-php53 .php
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule \.(jpg|jpeg|png|gif)$ - [NC,F,L]
+    RewriteCond %{REQUEST_FILENAME} !-d [OR]
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
 </IfModule>

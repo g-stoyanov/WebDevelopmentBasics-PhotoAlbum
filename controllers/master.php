@@ -2,28 +2,31 @@
 
 namespace Controllers;
 
-class Master_Controller {
+class Master_Controller
+{
 
     protected $layout;
     protected $views_dir;
     protected $class_name;
-    protected $model;
+    protected $models;
 
-    public function __construct( $class_name = '\Controllers\Master_Controller',
-                                 $models = array(
-                                     'master' => 'master'
-                                 ),
-                                 $views_dir = '/views/master/' ) {
+    public function __construct($class_name = '\Controllers\Master_Controller',
+                                $models = array(
+                                    'master' => 'master'
+                                ),
+                                $views_dir = '/views/master/')
+    {
 
         $this->views_dir = $views_dir;
         $this->class_name = $class_name;
 
-        foreach( $models as $key => $value ) {
+
+        foreach ($models as $key => $value) {
             include_once DX_ROOT_DIR . "models/{$value}.php";
 
             $model_class = "Models\\" . ucfirst($value) . "_Model";
 
-            $this->models[$key] = new $model_class( array( 'table' => 'none' ) );
+            $this->models[$key] = new $model_class(array('table' => 'none'));
         }
 
 
@@ -34,9 +37,10 @@ class Master_Controller {
         $this->layout = DX_ROOT_DIR . '/views/layouts/default.php';
     }
 
-    public function index() {
+    public function index()
+    {
 
-        $template_name = DX_ROOT_DIR . $this->views_dir . 'index.php';
+        $template_name = DX_ROOT_DIR . $this->views_dir . 'view.php';
 
         include_once $this->layout;
     }

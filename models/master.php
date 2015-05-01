@@ -81,6 +81,16 @@ class Master_Model {
         return $results;
     }
 
+    public function get_by_id( $id ){
+        $result = $this->find( array( 'where' => 'id = ' . $id ) );
+
+        if(count($result) > 0) {
+            return $result[0];
+        }
+
+        return null;
+    }
+
     protected function process_results( $result_set ){
         $results = array();
 

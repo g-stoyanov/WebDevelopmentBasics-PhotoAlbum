@@ -13,6 +13,8 @@ $param = array();
 
 include_once 'config/db.php';
 include_once 'lib/database.php';
+include_once 'lib/mime_content_type.php';
+include_once 'lib/image_resize.php';
 include_once 'lib/auth.php';
 include_once 'controllers/master.php';
 include_once 'models/master.php';

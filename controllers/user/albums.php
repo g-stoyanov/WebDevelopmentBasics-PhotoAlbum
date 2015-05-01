@@ -11,7 +11,8 @@ class Albums_Controller extends User_Controller {
         parent::__construct(get_class(),
             $models = array(
                 'album' => 'album',
-                'category' => 'category'
+                'category' => 'category',
+                'photo' => 'photo'
             ),
             'views/user/albums/');
     }
@@ -19,13 +20,12 @@ class Albums_Controller extends User_Controller {
     public function index() {
         $albums = $this->models['album']->find();
 
-        $template_name = DX_ROOT_DIR . $this->views_dir . 'index.php';
+        $template_name = DX_ROOT_DIR . $this->views_dir . 'view.php';
 
         include_once $this->layout;
     }
 
     public function add() {
-        var_dump($_POST);
         if( ! empty ( $_POST['name'] ) &&  ! empty ( $_POST['category_id'] ) ) {
             $name = $_POST['name'];
             $category_id = $_POST['category_id'];
@@ -44,6 +44,17 @@ class Albums_Controller extends User_Controller {
 
 
         $template_name = DX_ROOT_DIR . $this->views_dir . 'add.php';
+
+        include_once $this->layout;
+    }
+
+    public function photos( $id ) {
+        var_dump($id);
+        $photos = $this->models['photo']->find(array(
+            'where' => 'album_id = ' . $id
+        ));
+
+        $template_name = DX_ROOT_DIR . $this->views_dir . 'photos.php';
 
         include_once $this->layout;
     }
