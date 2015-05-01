@@ -1,7 +1,10 @@
             </div>
         </div>
-        <div id="footer">
-            Powered by SoftUni
-        </div>
+        <footer>
+            <?php
+            $year = date("Y");
+                echo "(c) Dream Team, {$year}";
+            ?>
+        </footer>
     </body>
 </html>

@@ -1,3 +1,4 @@
+<h2>Add Album</h2>
 <form method="POST">
     <p>
         Album Name: <input type="text" name="name" />

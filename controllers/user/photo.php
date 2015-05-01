@@ -11,7 +11,9 @@ class Photo_Controller extends User_Controller {
         parent::__construct(get_class(),
             $models = array(
                 'photo' => 'photo',
-                'album' => 'album'
+                'album' => 'album',
+                'photo_comment' => 'photo_comment',
+                'user' => 'user'
             ),
             'views/user/photo/');
     }
@@ -19,10 +21,24 @@ class Photo_Controller extends User_Controller {
     public function view( $id ) {
         $template_name = DX_ROOT_DIR . '/views/elements/cannot_find_resource.php';
 
+
         if( $id != null){
             $photo = $this->models['photo']->get_by_id( $id );
 
             if($photo != null){
+                $comments = $this->models['photo_comment']->find(array(
+                    'where' => 'photo_id = ' . $id,
+                    'order' => 'id'
+                ));
+
+                for($i = 0; $i < count($comments); $i++) {
+                    $user = $this->models['user']->get_by_id($comments[$i]['user_id']);
+
+                    $user = array('username' => $user['username']);
+
+                    $comments[$i] = array_merge( $comments[$i], $user );
+                }
+
                 $template_name = DX_ROOT_DIR . $this->views_dir . 'view.php';
             }
         }
@@ -42,10 +58,11 @@ class Photo_Controller extends User_Controller {
                 //if no errors...
                 if(!$_FILES['file']['error'])
                 {
+                    $file_type = explode('/', $_FILES['file']['type']);
                     //now is the time to modify the future file name and validate the file
                     $extension = end(explode('.', $_FILES['file']['name']));
                     $new_file_name = uniqid() . '.' . $extension; //rename file
-                    if($_FILES['file']['size'] > (1024000)) //can't be larger than 1 MB
+                    if($_FILES['file']['size'] > (1024000) || $file_type[0] != 'image') //can't be larger than 1 MB
                     {
                         $valid_file = false;
                         $message = 'Oops!  Your file\'s size is to large.';
@@ -87,7 +104,8 @@ class Photo_Controller extends User_Controller {
         }
 
         $albums = $this->models['album']->find(array(
-            'where' => 'user_id = ' . $this->logged_user['id']
+            'where' => 'user_id = ' . $this->logged_user['id'],
+            'order' => 'id'
         ));
 
         $template_name = DX_ROOT_DIR . $this->views_dir . 'add.php';
@@ -122,5 +140,43 @@ class Photo_Controller extends User_Controller {
         }
 
         include_once $this->layout;
+    }
+
+
+    public function comment( $id ) {
+        if(! empty($id)) {
+            $photo = $this->models['photo']->get_by_id($id);
+
+            if ($photo != null) {
+                if (!empty ($_POST['text'])) {
+                    $text = $_POST['text'];
+                    $user_id = $_POST['user_id'];
+
+                    $new_comment = array(
+                        'text' => $text,
+                        'user_id' => $user_id,
+                        'photo_id' => $photo['id']
+                    );
+
+                    $this->models['photo_comment']->add($new_comment);
+
+                    header('Location: /' . DX_ROOT_PATH . 'user/photo/view/' . $id);
+                    die;
+                }else{
+                    $template_name = DX_ROOT_DIR . $this->views_dir . 'comment.php';
+
+                    include_once $this->layout;
+                }
+            } else {
+                $template_name = DX_ROOT_DIR . '/views/elements/cannot_find_resource.php';
+                include_once $this->layout;
+                die;
+            }
+        }else{
+            $template_name = DX_ROOT_DIR . '/views/elements/cannot_find_resource.php';
+            include_once $this->layout;
+            die;
+        }
+
     }
 }

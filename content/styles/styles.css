@@ -1,0 +1,42 @@
+body>header{
+    background: #eee;
+    padding: 5px;
+}
+
+body>footer{
+    background: #eee;
+    padding: 5px;
+    text-align: center;
+}
+
+body>header>h1{
+    display: inline-block;
+    text-align: center;
+}
+
+body>header>img{
+    display: inline-block;
+    vertical-align: middle;
+}
+
+#userbar{
+    background: #eea;
+    padding: 5px;
+    text-align: center;
+}
+
+#loginbar{
+    background: #eea;
+    padding: 5px;
+    text-align: right;
+}
+
+ul, li{
+    display: inline-block;
+    vertical-align: middle;
+}
+
+li{
+    padding: 5px;
+}
+

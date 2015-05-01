@@ -1,3 +1,4 @@
+<h2>Add Photo</h2>
 <form method="POST" enctype="multipart/form-data">
     <p>
         Photo Name: <input type="text" name="name" />

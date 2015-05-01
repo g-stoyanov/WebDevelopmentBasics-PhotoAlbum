@@ -15,8 +15,11 @@ class User_Controller extends \Controllers\Master_Controller {
         $logged_user = $auth->get_logged_user();
 
         if( empty( $logged_user ) ) {
-            die( 'No access allowed here!' );
+            header('Location: /' . DX_ROOT_PATH . 'home/index');
+            die;
         }
+
+        $this->layout = DX_ROOT_DIR . '/views/layouts/user.php';
     }
 
     public function index() {

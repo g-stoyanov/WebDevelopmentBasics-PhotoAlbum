@@ -43,7 +43,7 @@ class Master_Model {
         $keys = implode( $keys, ',' );
         $values = implode( $values, ',' );
 
-        $query = "INSERT INTO {$this->table}($keys) VALUES($values)";
+        $query = "INSERT INTO {$this->table}($keys) VALUES ($values)";
 
         $this->db->query( $query );
 
@@ -98,6 +98,7 @@ class Master_Model {
             'page' => $this->page,
             'where' => '',
             'columns' => '*',
+            'order' => ''
         );
 
         $args = array_merge( $defaults, $args );
@@ -115,6 +116,11 @@ class Master_Model {
             $query .= " LIMIT {$skip}, {$limit}";
         }
 
+        if(! empty( $order )){
+            $query .= " ORDER BY " . $order;
+        }
+
+
         $result_set = $this->db->query( $query );
 
         $results = $this->process_results( $result_set );
@@ -123,6 +129,7 @@ class Master_Model {
     }
 
     public function get_by_id( $id ){
+
         $result = $this->find( array( 'where' => 'id = ' . $id ) );
 
         if(count($result) > 0) {

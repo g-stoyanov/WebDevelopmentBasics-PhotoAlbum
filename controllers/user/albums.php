@@ -22,7 +22,7 @@ class Albums_Controller extends User_Controller {
 
 
     public function index() {
-        $albums = $this->models['album']->find();
+        $albums = $this->models['album']->find(array('order' => 'id'));
 
         $columns = 'SUM(vote)';
 
@@ -36,8 +36,6 @@ class Albums_Controller extends User_Controller {
                 'columns' => $columns
             ));
 
-            var_dump($this->logged_user['id']);
-            var_dump($album_user_vote);
 
             $votes = array('votes' => $album_votes[0][$columns] ? $album_votes[0][$columns] : 0,
                            'user_vote' => $album_user_vote[0][$columns] ? $album_user_vote[0][$columns] : 0);
@@ -62,10 +60,11 @@ class Albums_Controller extends User_Controller {
             );
 
             $this->models['album']->add($new_album);
+            header('Location: /'. DX_ROOT_PATH .'user/albums/index');
+            die;
         }
 
-        $categories = $this->models['category']->find();
-
+        $categories = $this->models['category']->find(array('order' => 'id'));
 
         $template_name = DX_ROOT_DIR . $this->views_dir . 'add.php';
 
@@ -73,9 +72,9 @@ class Albums_Controller extends User_Controller {
     }
 
     public function photos( $id ) {
-        var_dump($id);
         $photos = $this->models['photo']->find(array(
-            'where' => 'album_id = ' . $id
+            'where' => 'album_id = ' . $id,
+            'order' => 'id'
         ));
 
         $template_name = DX_ROOT_DIR . $this->views_dir . 'photos.php';
@@ -83,7 +82,27 @@ class Albums_Controller extends User_Controller {
         include_once $this->layout;
     }
 
-    public function vote( $id ) {
+    public function vote( $args ) {
+        $path = 'Location: /'. DX_ROOT_PATH .'user/albums/index';
+        $args = explode('/', $args);
+        if(count($args) > 0){
+            $id = $args[0];
+            if(count($args) > 1){
+                if($args[1] === 'categories'){
+                    $path = 'Location: /'. DX_ROOT_PATH .'user/categories/albums';
+                }
+
+                if($args[1] === 'home'){
+                    $path = 'Location: /'. DX_ROOT_PATH .'user/home/index';
+                }
+                else{
+                    $template_name = DX_ROOT_DIR . '/views/elements/cannot_find_resource.php';
+                    include_once $this->layout;
+                    die;
+                }
+            }
+        }
+
         if ($id != null) {
             $album = $this->models['album']->get_by_id($id);
 
@@ -114,7 +133,7 @@ class Albums_Controller extends User_Controller {
                     $this->models['album_vote']->add($new_vote);
                 }
 
-                header('Location: /WebDevelopmentBasics-PhotoAlbum/user/albums/index');
+                header($path);
                 die;
             }
         }

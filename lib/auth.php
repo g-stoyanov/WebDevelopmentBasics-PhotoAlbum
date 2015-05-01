@@ -60,4 +60,36 @@ class Auth {
 
         return false;
     }
+
+    public function register( $username, $password ) {
+        $db_object = \Lib\Database::get_istance();
+        $db = $db_object::get_db();
+
+        $statement = $db->prepare(
+            "INSERT INTO users (username, password) VALUES (?, SHA1( ? ))"
+        );
+
+        $statement->bind_param('ss', $username, $password);
+
+        $statement->execute();
+
+        $result_set = $statement->get_result();
+
+        if( $statement->affected_rows > 0 ) {
+
+            if($this->login($username, $password)){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function logout()
+    {
+        session_start();
+        session_destroy();
+
+        return true;
+    }
 }
