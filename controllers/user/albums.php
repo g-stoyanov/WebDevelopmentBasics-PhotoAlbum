@@ -12,15 +12,39 @@ class Albums_Controller extends User_Controller {
             $models = array(
                 'album' => 'album',
                 'category' => 'category',
-                'photo' => 'photo'
+                'photo' => 'photo',
+                'album_vote' => 'album_vote'
             ),
             'views/user/albums/');
     }
 
+
+
+
     public function index() {
         $albums = $this->models['album']->find();
 
-        $template_name = DX_ROOT_DIR . $this->views_dir . 'view.php';
+        $columns = 'SUM(vote)';
+
+        for($i = 0; $i < count($albums); $i++) {
+            $album_votes = $this->models['album_vote']->find(array(
+                'where' => 'album_id = ' . $albums[$i]['id'], 'columns' => $columns
+            ));
+
+            $album_user_vote = $this->models['album_vote']->find(array(
+                'where' => 'album_id = ' . $albums[$i]['id'] . ' and user_id = ' . $this->logged_user['id'],
+                'columns' => $columns
+            ));
+
+            var_dump($this->logged_user['id']);
+            var_dump($album_user_vote);
+
+            $votes = array('votes' => $album_votes[0][$columns] ? $album_votes[0][$columns] : 0,
+                           'user_vote' => $album_user_vote[0][$columns] ? $album_user_vote[0][$columns] : 0);
+            $albums[$i] = array_merge( $albums[$i], $votes );
+        }
+
+        $template_name = DX_ROOT_DIR . $this->views_dir . 'index.php';
 
         include_once $this->layout;
     }
@@ -57,5 +81,42 @@ class Albums_Controller extends User_Controller {
         $template_name = DX_ROOT_DIR . $this->views_dir . 'photos.php';
 
         include_once $this->layout;
+    }
+
+    public function vote( $id ) {
+        if ($id != null) {
+            $album = $this->models['album']->get_by_id($id);
+
+            if ($album != null) {
+
+                $user_id = $this->logged_user['id'];
+                $album_id = $id;
+
+                $vote = $this->models['album_vote']->find(array(
+                    'where' => 'album_id = ' . $album_id . ' and user_id = ' . $user_id
+                ));
+
+                if ( $vote != null ) {
+                    if ($vote[0]['vote'] === '1') {
+                        $vote[0]['vote'] = 0;
+                    }else{
+                        $vote[0]['vote'] = 1;
+                    }
+
+                    $this->models['album_vote']->update($vote[0], array('user_id', 'album_id'));
+                }else{
+                    $new_vote = array(
+                        'vote' => 1,
+                        'user_id' => $user_id,
+                        'album_id' => $album_id
+                    );
+
+                    $this->models['album_vote']->add($new_vote);
+                }
+
+                header('Location: /WebDevelopmentBasics-PhotoAlbum/user/albums/index');
+                die;
+            }
+        }
     }
 }

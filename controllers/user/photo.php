@@ -94,4 +94,33 @@ class Photo_Controller extends User_Controller {
 
         include_once $this->layout;
     }
+
+    public function download( $id ) {
+        $template_name = DX_ROOT_DIR . '/views/elements/cannot_find_resource.php';
+
+        if( $id != null){
+            $photo = $this->models['photo']->get_by_id( $id );
+
+            if($photo != null){
+
+                $file = $photo['file'];
+
+                if (file_exists($file)) {
+                    header('Content-Description: File Transfer');
+                    header('Content-Type: application/octet-stream');
+                    header('Content-Disposition: attachment; filename='.basename($file));
+                    header('Expires: 0');
+                    header('Cache-Control: must-revalidate');
+                    header('Pragma: public');
+                    header('Content-Length: ' . filesize($file));
+                    readfile($file);
+                    exit;
+                }
+
+                $template_name = DX_ROOT_DIR . $this->views_dir . 'view.php';
+            }
+        }
+
+        include_once $this->layout;
+    }
 }

@@ -7,5 +7,7 @@
         $photo_name = htmlspecialchars($photo['name']);
         echo "{$photo_name} <br />";
         echo "<img src='{$src}' alt='{$photo_name}'>";
+        echo "<br />";
+        echo "<a href='/WebDevelopmentBasics-PhotoAlbum/user/photo/download/{$photo['id']}'> Download </a>";
 
 

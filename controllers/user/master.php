@@ -21,7 +21,7 @@ class User_Controller extends \Controllers\Master_Controller {
 
     public function index() {
 
-        $template_name = DX_ROOT_DIR . $this->views_dir . 'view.php';
+        $template_name = DX_ROOT_DIR . $this->views_dir . 'index.php';
 
         include_once $this->layout;
     }

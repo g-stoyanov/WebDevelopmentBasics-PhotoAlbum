@@ -50,6 +50,47 @@ class Master_Model {
         return $this->db->affected_rows;
     }
 
+    public function update( $element, $update_rules = array() ) {
+        $keys = array_keys( $element );
+
+        $query = "UPDATE {$this->table} SET ";
+
+        foreach ($element as $key => $value) {
+            $have_rule = false;
+
+            foreach ($update_rules as $rule) {
+                if ($key == $rule) {
+                    $have_rule = true;
+                }
+            }
+
+            if($have_rule){
+                continue;
+            }
+
+            $query .= "$key = '" . $this->db->real_escape_string($value) . "',";
+        }
+
+        $query = rtrim($query, ',');
+
+        if(count($update_rules) > 0){
+            $query .= " WHERE ";
+            foreach ($update_rules as $rule) {
+                $query .= " $rule = '" . $this->db->real_escape_string($element[$rule]) . "' AND ";
+            }
+
+            $query = rtrim($query, 'AND ');
+        } else {
+            $query .= "WHERE id = {$element['id']}";
+        }
+
+        var_dump($query);
+
+        $this->db->query( $query );
+
+        return $this->db->affected_rows;
+    }
+
     public function find( $args = array() ){
         $defaults = array(
             'table' => $this->table,
