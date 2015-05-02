@@ -14,7 +14,7 @@ class Home_Controller extends Master_Controller {
     }
 
     public function index() {
-        $albums = $this->models['album']->find(array('order' => 'id'));
+        $albums = $this->models['album']->get_top_albums();
 
         $columns = 'SUM(vote)';
 

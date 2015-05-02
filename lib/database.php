@@ -12,6 +12,7 @@ class Database {
         $dbname = DB_NAME;
 
         $db = new \mysqli( $host, $username, $password, $dbname );
+        $db->set_charset('utf8');
 
         self::$db = $db;
     }

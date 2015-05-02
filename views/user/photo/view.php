@@ -15,8 +15,9 @@ echo "<br />";
 echo "<br />";
 echo "Comments";
 foreach( $comments as $comment ) {
+    $comment_text = htmlspecialchars($comment['text']);
     echo "<p>user:{$comment['username']}</p>";
-    echo "<p>comment:{$comment['text']}</p><br />";
+    echo "<p>comment:{$comment_text}</p><br />";
 }
 
 

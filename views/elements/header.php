@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <meta charset="utf-8">
         <?php
         $root_path = DX_ROOT_PATH;
             echo "<link rel='stylesheet' href='/{$root_path}content/styles/styles.css' />"
         ?>
         <title>
-            Dream Albums
+            UGLY Albums
         </title>
     </head>
     <body>
@@ -15,7 +16,7 @@
             $root_path = DX_ROOT_PATH;
             echo "<img src='/{$root_path}content/images/logo.png'>"
             ?>
-            <h1>DREAM Albums</h1>
+            <h1>UGLY Albums</h1>
         </header>
         <div id="container">
             <?php
